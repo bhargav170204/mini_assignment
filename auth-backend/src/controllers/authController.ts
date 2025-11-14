@@ -2,7 +2,7 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-const User = require('../models/User');
+const User = require('../models/User.js');
 const { connectDatabase } = require('../config/database');
 
 // ------------------------
