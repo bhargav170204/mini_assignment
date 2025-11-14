@@ -16,14 +16,12 @@ const app: Application = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:8080',
-  credentials: true,
-}));
+// For local development, just allow all origins – keeps things simple
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// Routes – note the /api prefix here for local dev
 app.use('/api/auth', authRoutes);
 
 // Health check
@@ -42,8 +40,7 @@ app.use((req: Request, res: Response) => {
   });
 });
 
-// Start server
-
+// Start server (local only)
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
