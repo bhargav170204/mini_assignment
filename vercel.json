@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "user-guard-verse-main/package.json",
+      "src": "package.json",
       "use": "@vercel/static-build",
       "config": { "distDir": "dist" }
     },
@@ -12,29 +12,7 @@
     }
   ],
   "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/assets/(.*)",
-      "dest": "/user-guard-verse-main/dist/assets/$1"
-    },
-    {
-      "src": "/favicon.ico",
-      "dest": "/user-guard-verse-main/dist/favicon.ico"
-    },
-    {
-      "src": "/robots.txt",
-      "dest": "/user-guard-verse-main/dist/robots.txt"
-    },
-    {
-      "src": "/",
-      "dest": "/user-guard-verse-main/dist/index.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/user-guard-verse-main/dist/index.html"
-    }
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
