@@ -1,3 +1,4 @@
+// auth-backend/src/serverless.ts
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -13,20 +14,23 @@ connectDatabase().catch((err: any) => {
 
 const app = express();
 
+// CORS – safe for prod + local
 app.use(
   cors({
     origin: process.env.FRONTEND_URL || '*',
     credentials: true,
   })
 );
-app.use(express.json());
 
-// --- Define routes ---
-// Notice: NO /api prefix here – Vercel already stripped it.
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// ⚠️ IMPORTANT: NO /api prefix here.
+// Vercel strips `/api` before hitting this function.
 app.post('/auth/signup', signup);
 app.post('/auth/login', login);
 app.get('/auth/me', getMe);
 app.post('/auth/logout', logout);
 
-// Let Express handle the request/response directly
+// Export the Express app for Vercel
 export default app;
