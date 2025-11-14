@@ -1,8 +1,11 @@
 // api/[...vercel].ts
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+
+// Import the default Express app from the serverless entry.
+// Note: .js extension is required for Node16/NodeNext resolution on Vercel.
 import app from '../auth-backend/src/serverless.js';
 
-// Forward the Vercel request/response into the Express app
-export default function handler(req: VercelRequest, res: VercelResponse) {
+// Vercel will call this default-exported handler.
+// We just pass the req/res into the Express app.
+export default function handler(req: any, res: any) {
   return (app as any)(req, res);
 }
