@@ -1,17 +1,15 @@
-// Lightweight model file using require() to avoid TypeScript module resolution issues
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
+import mongoose from "mongoose";
 
-const UserSchema = new Schema(
+const userSchema = new mongoose.Schema(
   {
-    email: { type: String, required: true, unique: true, index: true },
-    password: { type: String, required: true },
-    fullName: { type: String, required: true },
-    role: { type: String, enum: ['user', 'admin'], default: 'user' },
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true }
   },
   { timestamps: true }
 );
 
-const User = mongoose.models.User || mongoose.model('User', UserSchema);
-module.exports = User;
+const User =
+  mongoose.models.User || mongoose.model("User", userSchema);
 
+export default User;
