@@ -1,0 +1,6 @@
+auth-backend/node_modules
+auth-backend/dist
+user-guard-verse-main/node_modules
+.git
+.env
+auth-backend/.env

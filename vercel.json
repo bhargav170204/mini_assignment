@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "buildCommand": "npm --prefix user-guard-verse-main run build",
-  "outputDirectory": "user-guard-verse-main/dist",
+  "buildCommand": "cd user-guard-verse-main && npm install && npm run build && cd .. && cp -r user-guard-verse-main/dist ./public",
+  "outputDirectory": "public",
   "builds": [
     {
       "src": "api/**/*.ts",
