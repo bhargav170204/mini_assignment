@@ -1,7 +1,12 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import serverlessExpress from '@vendia/serverless-express';
 
-const app = require('../auth-backend/src/serverless.ts');
+// Use CommonJS require to avoid ESM extension resolution issues on Vercel
+const serverlessExpressModule: any = require('@vendia/serverless-express');
+const serverlessExpress = serverlessExpressModule.default || serverlessExpressModule;
+
+// Require the Express app from the backend source (no .ts extension)
+const appModule: any = require('../auth-backend/src/serverless');
+const app = appModule.default || appModule;
 
 const handler = serverlessExpress({ app });
 
