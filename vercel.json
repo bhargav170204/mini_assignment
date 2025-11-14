@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "buildCommand": "cd user-guard-verse-main && npm install && npm run build && cd .. && cp -r user-guard-verse-main/dist ./public",
-  "outputDirectory": "public",
   "builds": [
+    {
+      "src": "user-guard-verse-main/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "dist" }
+    },
     {
       "src": "api/**/*.ts",
       "use": "@vercel/node"
