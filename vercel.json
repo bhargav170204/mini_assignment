@@ -25,6 +25,10 @@
       "dest": "/user-guard-verse-main/dist/favicon.ico"
     },
     {
+      "src": "/robots.txt",
+      "dest": "/user-guard-verse-main/dist/robots.txt"
+    },
+    {
       "src": "/",
       "dest": "/user-guard-verse-main/dist/index.html"
     },
