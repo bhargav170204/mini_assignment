@@ -1,14 +1,8 @@
 {
   "version": 2,
+  "buildCommand": "npm --prefix user-guard-verse-main run build",
+  "outputDirectory": "user-guard-verse-main/dist",
   "builds": [
-    {
-      "src": "user-guard-verse-main/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "user-guard-verse-main/dist",
-        "buildCommand": "npm --prefix user-guard-verse-main run build"
-      }
-    },
     {
       "src": "api/**/*.ts",
       "use": "@vercel/node"
