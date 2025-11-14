@@ -1,7 +1,8 @@
 // api/[...vercel].ts
-// Import the named callable `handler` from the backend serverless entry.
-// Using the explicit .js extension is required for node16/nodenext resolution on Vercel.
-import { handler as appHandler } from '../auth-backend/src/serverless.js';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+import app from '../auth-backend/src/serverless.js';
 
-// Re-export the handler for Vercel to call directly.
-export default appHandler;
+// Forward the Vercel request/response into the Express app
+export default function handler(req: VercelRequest, res: VercelResponse) {
+  return (app as any)(req, res);
+}
