@@ -2,9 +2,15 @@ import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes';
+const { connectDatabase } = require('./config/database');
 
 // Load environment variables
 dotenv.config();
+
+// connect to DB
+connectDatabase().catch((err: any) => {
+  console.error('Error connecting to database:', err);
+});
 
 const app: Application = express();
 const PORT = process.env.PORT || 3000;
@@ -37,6 +43,7 @@ app.use((req: Request, res: Response) => {
 });
 
 // Start server
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);

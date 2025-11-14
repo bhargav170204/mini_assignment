@@ -1,27 +1,22 @@
-# Auth Backend (Node.js + Express + Prisma + PostgreSQL)
+# Auth Backend (Node.js + Express + Mongoose + MongoDB)
 
-This repository contains a TypeScript-based authentication backend using Express and Prisma.
+This backend uses TypeScript, Express and Mongoose (MongoDB). The project was converted from Prisma/Postgres to MongoDB for easier Vercel deployment.
 
-## Quick start
+Quick start
 
 1. Install dependencies:
    ```bash
+   cd auth-backend
    npm install
    ```
 
 2. Set up environment:
-   - Copy `.env.example` to `.env` and update `DATABASE_URL` and `JWT_SECRET`.
+   - Copy `.env.example` to `.env` and update `MONGODB_URI` (use MongoDB Atlas or a local MongoDB) and `JWT_SECRET`.
 
-3. Initialize Prisma:
-   ```bash
-   npx prisma generate
-   npx prisma migrate dev --name init
-   ```
-
-4. Start dev server:
+3. Start dev server:
    ```bash
    npm run dev
    ```
 
-## Notes
-- This project is generated for you and saved as a zip in `/mnt/data/auth-backend.zip`.
+Notes
+- Do not commit real credentials. For production on Vercel, set `MONGODB_URI` and `JWT_SECRET` in Project → Settings → Environment Variables.

@@ -1,0 +1,19 @@
+{
+  "name": "mini_fulll_stack_assignment-root",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "vercel-build": "npm --prefix user-guard-verse-main run build"
+  },
+  "dependencies": {
+    "@vendia/serverless-express": "^4.6.0",
+    "@vercel/node": "^2.0.0",
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "mongoose": "^7.5.0",
+    "bcrypt": "^5.1.1",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

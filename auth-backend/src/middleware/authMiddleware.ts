@@ -1,7 +1,8 @@
 // src/middleware/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import prisma from '../config/database';
+const User = require('../models/User');
+const { connectDatabase } = require('../config/database');
 // --- local type augmentation (paste right after imports) ---
 declare global {
   namespace Express {
@@ -57,10 +58,8 @@ export const protect = async (req: Request, res: Response, next: NextFunction): 
       return;
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: decoded.userId },
-      include: { userRole: true },
-    });
+    await connectDatabase();
+    const user = await User.findById(decoded.userId).exec();
 
     if (!user) {
       res.status(401).json({ success: false, message: 'User not found' });
@@ -71,8 +70,8 @@ export const protect = async (req: Request, res: Response, next: NextFunction): 
     req.user = {
       id: user.id,
       email: user.email,
-      fullName: user.fullName,
-      role: user.userRole?.role ?? 'user',
+      fullName: (user as any).fullName,
+      role: (user as any).role ?? 'user',
     };
 
     next();

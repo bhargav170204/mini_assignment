@@ -48,6 +48,13 @@ const Login = () => {
       // Store token and optionally some user info
       localStorage.setItem('token', token);
 
+      // Notify auth providers in this tab and other tabs
+      try {
+        if (typeof window !== 'undefined') window.dispatchEvent(new Event('authChanged'));
+      } catch (e) {
+        // ignore
+      }
+
       // Optionally store user (useful)
       const user = res?.data?.data?.user ?? res?.data?.user;
       if (user) localStorage.setItem('user', JSON.stringify(user));

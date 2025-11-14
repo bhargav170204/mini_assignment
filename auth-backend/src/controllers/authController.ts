@@ -2,7 +2,8 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import prisma from '../config/database';
+const User = require('../models/User');
+const { connectDatabase } = require('../config/database');
 
 // ------------------------
 // Generate JWT Token
@@ -27,6 +28,7 @@ const generateToken = (userId: string): string => {
 // ------------------------
 export const signup = async (req: Request, res: Response): Promise<void> => {
   try {
+    await connectDatabase();
     const { email, password, fullName, role } = req.body;
 
     // Validation
@@ -47,7 +49,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Check if user already exists
-    const existingUser = await prisma.user.findUnique({ where: { email } });
+    const existingUser = await User.findOne({ email }).exec();
 
     if (existingUser) {
       res.status(400).json({
@@ -61,34 +63,26 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user and assign role
-    const user = await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        fullName,
-        userRole: {
-          create: {
-            role: (role as any) || 'user',
-          },
-        },
-      },
-      include: {
-        userRole: true,
-      },
+    const userDoc = new User({
+      email,
+      password: hashedPassword,
+      fullName,
+      role: (role as any) || 'user',
     });
+    const saved = await userDoc.save();
 
     // Generate JWT
-    const token = generateToken(user.id);
+    const token = generateToken(saved.id);
 
     res.status(201).json({
       success: true,
       message: 'User registered successfully',
       data: {
         user: {
-          id: user.id,
-          email: user.email,
-          fullName: user.fullName,
-          role: user.userRole?.role,
+          id: saved.id,
+          email: saved.email,
+          fullName: saved.fullName,
+          role: saved.role,
         },
         token,
       },
@@ -109,6 +103,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
 // ------------------------
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
+    await connectDatabase();
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -120,10 +115,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Find user with role
-    const user = await prisma.user.findUnique({
-      where: { email },
-      include: { userRole: true },
-    });
+    const user = await User.findOne({ email }).exec();
 
     if (!user) {
       res.status(401).json({
@@ -154,7 +146,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
           id: user.id,
           email: user.email,
           fullName: user.fullName,
-          role: user.userRole?.role,
+          role: user.role,
         },
         token,
       },
@@ -186,21 +178,8 @@ export const getMe = async (req: Request, res: Response): Promise<void> => {
     }
 
     const userId = String(maybeUser.id);
-
-    // Fetch user details with role (select only)
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        id: true,
-        email: true,
-        fullName: true,
-        createdAt: true,
-        updatedAt: true,
-        userRole: {
-          select: { role: true },
-        },
-      },
-    });
+    await connectDatabase();
+    const user = await User.findById(userId).select('id email fullName role createdAt updatedAt').exec();
 
     if (!user) {
       res.status(404).json({

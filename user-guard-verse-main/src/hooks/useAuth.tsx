@@ -27,6 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let cancelled = false;
 
     const checkAuth = async () => {
+      if (!cancelled) setLoading(true);
       try {
         const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 

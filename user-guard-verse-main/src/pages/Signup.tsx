@@ -63,6 +63,13 @@ const Signup = () => {
       // store token for subsequent requests
       localStorage.setItem('token', token);
 
+      // Notify auth providers in this tab and other tabs
+      try {
+        if (typeof window !== 'undefined') window.dispatchEvent(new Event('authChanged'));
+      } catch (e) {
+        // ignore
+      }
+
       toast({
         title: "Success!",
         description: "Account created successfully. Redirecting to dashboard...",

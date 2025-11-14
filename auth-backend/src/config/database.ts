@@ -1,16 +1,29 @@
 // src/config/database.ts
-import { PrismaClient } from "@prisma/client";
+const dotenv = require('dotenv');
 
-declare global {
-  // allow global prisma in dev to avoid multiple instances during hot reloads
-  // eslint-disable-next-line no-var
-  var prisma: PrismaClient | undefined;
+dotenv.config();
+
+const mongoUri = process.env.MONGODB_URI ?? process.env.DATABASE_URL;
+
+if (!mongoUri) {
+  console.warn('No MONGODB_URI or DATABASE_URL provided. Mongoose will not connect automatically.');
 }
 
-const prisma = global.prisma ?? new PrismaClient();
+let isConnected = false;
+let mongooseConn: any = null;
 
-if (process.env.NODE_ENV !== "production") {
-  global.prisma = prisma;
-}
+exports.connectDatabase = async (): Promise<void> => {
+  if (isConnected) return;
+  if (!mongoUri) {
+    throw new Error('MONGODB_URI (or DATABASE_URL) is not configured');
+  }
 
-export default prisma;
+  mongooseConn = require('mongoose');
+  await mongooseConn.connect(mongoUri);
+  isConnected = true;
+  console.log('✅ Mongoose connected');
+};
+
+// For convenience, export mongoose instance accessor
+exports.default = () => mongooseConn;
+
