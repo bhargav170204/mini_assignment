@@ -14,7 +14,13 @@ connectDatabase().catch((err: any) => {
 
 const app = express();
 
-// CORS – safe for prod + local
+// Log every incoming request so we can see the real path in Vercel logs
+app.use((req, _res, next) => {
+  console.log('Incoming request:', req.method, req.url);
+  next();
+});
+
+// CORS
 app.use(
   cors({
     origin: process.env.FRONTEND_URL || '*',
@@ -25,12 +31,11 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ⚠️ IMPORTANT: NO /api prefix here.
-// Vercel strips `/api` before hitting this function.
-app.post('/auth/signup', signup);
-app.post('/auth/login', login);
-app.get('/auth/me', getMe);
-app.post('/auth/logout', logout);
+// ⭐ IMPORTANT: support BOTH with and without `/api` prefix
+app.post(['/api/auth/signup', '/auth/signup'], signup);
+app.post(['/api/auth/login', '/auth/login'], login);
+app.get(['/api/auth/me', '/auth/me'], getMe);
+app.post(['/api/auth/logout', '/auth/logout'], logout);
 
 // Export the Express app for Vercel
 export default app;
