@@ -13,12 +13,8 @@
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
-
-    // let Vite static files be served normally
     { "src": "/assets/(.*)", "dest": "/assets/$1" },
     { "src": "/favicon.ico", "dest": "/favicon.ico" },
-
-    // SPA fallback – anything else goes to index.html
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
