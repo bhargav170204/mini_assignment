@@ -21,5 +21,10 @@ app.post('/api/auth/login', login);
 app.get('/api/auth/me', getMe);
 app.post('/api/auth/logout', logout);
 
+// Export a callable handler for serverless platforms to avoid TypeScript callable-module issues
+export function handler(req: any, res: any) {
+	return (app as any)(req, res);
+}
+
 // --- Export as serverless function ---
 export default app;
