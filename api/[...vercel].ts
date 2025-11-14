@@ -1,7 +1,6 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 
 // CommonJS require to avoid ESM extension resolution issues on Vercel
-// Loads @vendia/serverless-express with fallback for default export
 const serverlessExpressModule: any = require('@vendia/serverless-express');
 const serverlessExpress = serverlessExpressModule.default || serverlessExpressModule;
 
@@ -12,4 +11,5 @@ const app = appModule.default || appModule;
 // Wrap Express app with serverless handler
 const handler = serverlessExpress({ app });
 
-export default (req: VercelRequest, res: VercelResponse) => handler(req, res);
+// Export as CommonJS to avoid module resolution issues
+module.exports = (req: VercelRequest, res: VercelResponse) => handler(req, res);
